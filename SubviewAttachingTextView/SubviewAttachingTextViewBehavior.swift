@@ -30,8 +30,8 @@ open class SubviewAttachingTextViewBehavior: NSObject, NSLayoutManagerDelegate, 
 
     // MARK: Subview tracking
 
-    private let attachedViews = NSMapTable<TextAttachedViewProvider, UIView>.strongToStrongObjects()
-    private var attachedProviders: Array<TextAttachedViewProvider> {
+    let attachedViews = NSMapTable<TextAttachedViewProvider, UIView>.strongToStrongObjects()
+    var attachedProviders: Array<TextAttachedViewProvider> {
         return Array(self.attachedViews.keyEnumerator()) as! Array<TextAttachedViewProvider>
     }
 
@@ -93,6 +93,21 @@ open class SubviewAttachingTextViewBehavior: NSObject, NSLayoutManagerDelegate, 
 
         // For each attached subview, find its associated attachment and position it according to its text layout
         let attachmentRanges = textView.textStorage.subviewAttachmentRanges
+
+        // Note: There is a strange bug that if textView is inside table view
+        // that the subviews get detached.
+        for (attachment, _) in attachmentRanges {
+            guard let view = self.attachedViews.object(forKey: attachment.viewProvider) else {
+                // A view for this provider is not attached yet??
+                continue
+            }
+            guard view.superview === textView else {
+                // Re-attach
+                textView.addSubview(view)
+                continue
+            }
+        }
+
         for (attachment, range) in attachmentRanges {
             guard let view = self.attachedViews.object(forKey: attachment.viewProvider) else {
                 // A view for this provider is not attached yet??

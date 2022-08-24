@@ -24,9 +24,9 @@ open class SubviewAttachingTextView: UITextView {
         self.commonInit()
     }
 
-    private let attachmentBehavior = SubviewAttachingTextViewBehavior()
+    let attachmentBehavior = SubviewAttachingTextViewBehavior()
 
-    private func commonInit() {
+    func commonInit() {
         // Connect the attachment behavior
         self.attachmentBehavior.textView = self
         self.layoutManager.delegate = self.attachmentBehavior
