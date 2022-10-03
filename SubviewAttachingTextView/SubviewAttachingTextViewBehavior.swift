@@ -30,8 +30,8 @@ open class SubviewAttachingTextViewBehavior: NSObject, NSLayoutManagerDelegate, 
 
     // MARK: Subview tracking
 
-    let attachedViews = NSMapTable<TextAttachedViewProvider, UIView>.strongToStrongObjects()
-    var attachedProviders: Array<TextAttachedViewProvider> {
+    public let attachedViews = NSMapTable<TextAttachedViewProvider, UIView>.strongToStrongObjects()
+    open var attachedProviders: Array<TextAttachedViewProvider> {
         return Array(self.attachedViews.keyEnumerator()) as! Array<TextAttachedViewProvider>
     }
 
@@ -70,7 +70,7 @@ open class SubviewAttachingTextViewBehavior: NSObject, NSLayoutManagerDelegate, 
         }
     }
 
-    private func removeAttachedSubviews() {
+    open func removeAttachedSubviews() {
         for provider in self.attachedProviders {
             self.attachedViews.object(forKey: provider)?.removeFromSuperview()
         }
@@ -135,7 +135,7 @@ open class SubviewAttachingTextViewBehavior: NSObject, NSLayoutManagerDelegate, 
         }
     }
 
-    private static func boundingRect(forAttachmentCharacterAt characterIndex: Int, layoutManager: NSLayoutManager) -> CGRect? {
+    public static func boundingRect(forAttachmentCharacterAt characterIndex: Int, layoutManager: NSLayoutManager) -> CGRect? {
         let glyphRange = layoutManager.glyphRange(forCharacterRange: NSMakeRange(characterIndex, 1), actualCharacterRange: nil)
         let glyphIndex = glyphRange.location
         guard glyphIndex != NSNotFound && glyphRange.length == 1 else {
@@ -160,7 +160,7 @@ open class SubviewAttachingTextViewBehavior: NSObject, NSLayoutManagerDelegate, 
 
     // MARK: NSLayoutManagerDelegate
 
-    public func layoutManager(_ layoutManager: NSLayoutManager, didCompleteLayoutFor textContainer: NSTextContainer?, atEnd layoutFinishedFlag: Bool) {
+    open func layoutManager(_ layoutManager: NSLayoutManager, didCompleteLayoutFor textContainer: NSTextContainer?, atEnd layoutFinishedFlag: Bool) {
         if layoutFinishedFlag {
             self.layoutAttachedSubviews()
         }
@@ -168,7 +168,7 @@ open class SubviewAttachingTextViewBehavior: NSObject, NSLayoutManagerDelegate, 
 
     // MARK: NSTextStorageDelegate
 
-    public func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
+    open func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
         if editedMask.contains(.editedAttributes) {
             self.updateAttachedSubviews()
         }

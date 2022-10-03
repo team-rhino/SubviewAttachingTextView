@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.author             = { "Vlas Voloshin" => "argentumko@gmail.com" }
   s.social_media_url   = "https://twitter.com/argentumko"
   s.platform     = :ios, "8.0"
-  s.source       = { :git => "https://github.com/benedictchen/SubviewAttachingTextView.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/team-rhino/SubviewAttachingTextView.git", :tag => "#{s.version}" }
 
   s.source_files  = "SubviewAttachingTextView/*.swift"
   s.requires_arc = true
